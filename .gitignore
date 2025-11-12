@@ -1,0 +1,10 @@
+.env
+*.pdf
+*.pyc
+__pycache__
+*.log
+.venv
+img
+latex
+text
+translated_pdf
