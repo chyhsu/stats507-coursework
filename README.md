@@ -2,6 +2,9 @@
 
 A specialized tool that transforms English PDF documents into multiple languages using Google's Gemini AI. This application intelligently processes PDFs by extracting both textual content and visual elements, then generates high-quality LaTeX code that maintains the original document's layout while providing accurate translations, finally, it compiles the LaTeX code to PDF. 
 
+
+
+
 ## Features
 
 - **PDF Processing**: Extract text with huggingface model "facebook/nougat-base" and convert pages to images
@@ -76,7 +79,7 @@ A specialized tool that transforms English PDF documents into multiple languages
 3. Select the target language (default: Traditional Chinese zh-TW).
 4. Click Start Translation. Progress and logs appear in the window.
 
-
+![PDF Translator GUI screenshot](image.png)
 
 ### Outputs
 
