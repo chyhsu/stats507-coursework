@@ -1,10 +1,10 @@
-# PDF Translator from English to Traditional Chinese
+# PDF Translator
 
-A specialized tool that transforms English PDF documents into Traditional Chinese using Google's Gemini AI. This application intelligently processes PDFs by extracting both textual content and visual elements, then generates high-quality LaTeX code that maintains the original document's layout while providing accurate Chinese translations.
+A specialized tool that transforms English PDF documents into multiple languages using Google's Gemini AI. This application intelligently processes PDFs by extracting both textual content and visual elements, then generates high-quality LaTeX code that maintains the original document's layout while providing accurate translations, finally, it compiles the LaTeX code to PDF. 
 
 ## Features
 
-- **PDF Processing**: Extract text with position information and convert pages to images
+- **PDF Processing**: Extract text with huggingface model "facebook/nougat-base" and convert pages to images
 - **AI-Powered Translation**: Generate LaTeX code using Google Gemini AI
 - **LaTeX Compilation**: Automatically compile LaTeX to PDF using XeLaTeX
 - **Structured Output**: Organized directory structure for images, text, LaTeX, and output PDFs
@@ -16,20 +16,32 @@ A specialized tool that transforms English PDF documents into Traditional Chines
 - LaTeX distribution with XeLaTeX
 - Poppler (for pdf2image to convert PDF pages to images)
 - PySide6 (for the GUI app)
+- (Optional) [uv](https://github.com/astral-sh/uv) for faster virtual environment and dependency management
 
 ## Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/file_translator.git
-   cd file_translator
+   git clone https://github.com/chyhsu/stats507-coursework.git
+   cd stats507-coursework
    ```
 
-2. Create and activate a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+2. Create and activate a virtual environment (choose one):
+
+   - **Option A: Using uv (if installed)**
+     ```bash
+     uv venv venv
+     source venv/bin/activate  # On Windows: venv\Scripts\activate
+     ```
+
+   - **Option B: Using plain Python venv**
+     ```bash
+     python -m venv venv
+     # On Linux/macOS
+     source venv/bin/activate
+     # On Windows (PowerShell or cmd)
+     venv\Scripts\activate
+     ```
 
 3. Install dependencies:
    ```bash
@@ -47,6 +59,7 @@ A specialized tool that transforms English PDF documents into Traditional Chines
    - **Linux**: `sudo apt install texlive-xetex texlive-fonts-recommended texlive-fonts-extra`
 
 6. Create a `.env` file with your Gemini API key:
+   (You can get a free API key from [Google Gemini](https://makersuite.google.com/app/apikey) for free)
    ```
    GEMINI_API_KEY=your_gemini_api_key_here
    ```
@@ -57,19 +70,13 @@ A specialized tool that transforms English PDF documents into Traditional Chines
 
 1. Run the GUI:
    ```bash
-   python gui_app.py
+   python main.py
    ```
 2. Click Browse to choose a PDF.
 3. Select the target language (default: Traditional Chinese zh-TW).
 4. Click Start Translation. Progress and logs appear in the window.
 
-### Programmatic / CLI
 
-Call the translator function directly:
-
-```bash
-python -c "from file_translator import file_translator; file_translator('/absolute/path/to/document.pdf', 'Traditional Chinese')"
-```
 
 ### Outputs
 
@@ -81,16 +88,25 @@ python -c "from file_translator import file_translator; file_translator('/absolu
 ## Project Structure
 
 ```
-file_translator/
+stats507-coursework/
+├── main.py             # Entry point for running the GUI
+├── gui_app.py          # PySide6 GUI implementation
+├── file_translator.py  # High-level translation pipeline
 ├── model/
-│   ├── __init__.py     # Gemini API integration
-│   └── model.py        # AI model implementation
+│   ├── __init__.py     # Gemini API key loading and exports
+│   ├── model.py        # Gemini client + prompt invocation
+│   └── prompt.py       # System prompt for LaTeX-generating translator
 ├── util/
-│   ├── __init__.py     # Utility functions
-│   ├── latex.py        # LaTeX to PDF conversion
-│   └── file.py          # PDF processing utilities
-├── file_translator.py  # Main execution script
-└── .env                # Environment variables
+│   ├── __init__.py     # Utility exports
+│   ├── latex.py        # LaTeX to PDF compilation helpers
+│   └── file.py         # PDF → images/text and LaTeX parsing utilities
+├── img/                # Extracted page images from PDFs(auto-generated)
+├── text/               # Extracted text/markdown from PDFs(auto-generated)
+├── latex/              # Generated LaTeX source files(auto-generated)
+├── translated_pdf/     # Final translated PDF outputs(auto-generated)
+├── requirements.txt    # Python dependencies
+├── pyproject.toml      # Project metadata and dependency list
+└── .env                # Environment variables (Gemini API key) (generated by you)
 ```
 
 ## Troubleshooting
